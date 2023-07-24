@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using AuditTrail;
 using AuditTrail.Model;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System;
 
 namespace AspNetCoreElasticsearchNestAuditTrail
 {
@@ -24,9 +26,22 @@ namespace AspNetCoreElasticsearchNestAuditTrail
             services.AddAuditTrail<CustomAuditTrailLog>(options => 
                 options.UseSettings(indexPerMonth, amountOfPreviousIndicesUsedInAlias)
             );
-
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = $"接口文档",
+                    Description = $"HTTP API ",
+                    Contact = new OpenApiContact { Name = "懒得勤快", Email = "admin@masuit.com", Url = new Uri("https://masuit.coom") },
+                    License = new OpenApiLicense { Name = "懒得勤快", Url = new Uri("https://masuit.com") }
+                });
+                c.IncludeXmlComments(AppContext.BaseDirectory + "AspNetCoreElasticsearchNestAuditTrail.xml");
+            }); //配置swagger
+            services.AddControllers();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +61,10 @@ namespace AspNetCoreElasticsearchNestAuditTrail
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSwagger().UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "懒得勤快的博客，搜索引擎测试");
+            }); //配置swagger
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

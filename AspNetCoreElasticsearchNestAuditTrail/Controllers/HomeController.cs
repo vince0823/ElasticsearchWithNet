@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace AspNetCoreElasticsearchNestAuditTrail.Controllers
 {
+    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly IAuditTrailProvider<CustomAuditTrailLog> _auditTrailProvider;
@@ -15,12 +16,12 @@ namespace AspNetCoreElasticsearchNestAuditTrail.Controllers
         {
             _auditTrailProvider = auditTrailProvider;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             var auditTrailLog = new CustomAuditTrailLog()
             {
-                User = User.ToString(),
+                User = "ss",
                 Origin = "HomeController:Index",
                 Action = "Home GET",
                 Log = "home page called doing something important enough to be added to the audit log.",
@@ -30,7 +31,7 @@ namespace AspNetCoreElasticsearchNestAuditTrail.Controllers
             _auditTrailProvider.AddLog(auditTrailLog);
             return View();
         }
-
+        [HttpGet]
         public IActionResult AuditTrail()
         {
             var auditTrailLog = new CustomAuditTrailLog()
@@ -53,7 +54,7 @@ namespace AspNetCoreElasticsearchNestAuditTrail.Controllers
             };
             return View(auditTrailViewModel);
         }
-
+        [HttpGet]
         public IActionResult AuditTrailSearch(string searchString, int skip, int amount)
         {
 
@@ -80,7 +81,7 @@ namespace AspNetCoreElasticsearchNestAuditTrail.Controllers
             auditTrailViewModel.AuditTrailLogs = _auditTrailProvider.QueryAuditLogs(searchString).ToList();
             return View(auditTrailViewModel);
         }
-
+        [HttpGet]
         public IActionResult Contact()
         {
             var auditTrailLog = new CustomAuditTrailLog()
@@ -97,7 +98,7 @@ namespace AspNetCoreElasticsearchNestAuditTrail.Controllers
             return View();
         }
 
-
+        [HttpGet]
         public IActionResult Error()
         {
             var auditTrailLog = new CustomAuditTrailLog()

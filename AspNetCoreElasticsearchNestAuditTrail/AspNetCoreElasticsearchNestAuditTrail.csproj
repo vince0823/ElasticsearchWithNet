@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>E:\个人项目\学习 github\NestAuditTrial\AspNetCoreElasticsearchNestAuditTrail\AspNetCoreElasticsearchNestAuditTrail.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,13 +13,19 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
 	<PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AuditTrail\AuditTrail.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AspNetCoreElasticsearchNestAuditTrail.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('node_modules') ">
